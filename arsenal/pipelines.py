@@ -34,9 +34,12 @@ class ArsenalPipeline(object):
         self.db = self.client[self.mongo_db]
         self.collection_item = self.db[self.mongo_collection_item]
         self.collection_artical = self.db[self.mongo_collection_artical]
-        self.latest_item = self.collection_item.find().sort("artical_id", pymongo.DESCENDING)[0]
-        self.latest_artical_id = self.latest_item['artical_id']
-        print self.latest_item
+        if self.collection_item and self.collection_item.find().count() > 0:
+        	self.latest_item = self.collection_item.find().sort("artical_id", pymongo.DESCENDING)[0]
+        	self.latest_artical_id = self.latest_item['artical_id']
+        else:
+        	self.latest_artical_id = 0
+        # print self.latest_item
         print self.latest_artical_id
 
     def close_spider(self, spider):
