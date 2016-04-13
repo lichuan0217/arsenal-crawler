@@ -27,3 +27,10 @@ class ArsenalArticalItem(scrapy.Item):
     artical_important_pic = scrapy.Field()
     artical_main_content = scrapy.Field()
     artical_editor = scrapy.Field()
+    artical_type = scrapy.Field()
+
+# class ArsenalArticalReadItem(ArsenalArticalItem):
+#     artical_type = scrapy.Field()
+
+class ArsenalArticalVideoItem(ArsenalArticalItem):
+    artical_video_play = scrapy.Field()

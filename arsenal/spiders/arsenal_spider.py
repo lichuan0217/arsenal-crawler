@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import scrapy
-from arsenal.items import ArsenalCardItem, ArsenalArticalItem
+from arsenal.items import ArsenalCardItem, ArsenalArticalItem, ArsenalArticalVideoItem
 
 
 class ArsenalSpiderSpider(scrapy.Spider):
@@ -65,12 +65,29 @@ class ArsenalSpiderSpider(scrapy.Spider):
         artical_title = artical.xpath("div[@class='artical-title']/h1/text()").extract()
         artical_src = artical.xpath("div[@class='artical-title']/div[@class='artical-info']/span/span[@class='comeFrom']/a/text()").extract()
         artical_date = artical.xpath("div[@class='artical-title']/div[@class='artical-info']/span/a/span/text()").extract()
-        artical_content = artical.xpath("div[@class='artical-content']/div[@class='artical-content-read']")
-        artical_important_pic = artical_content.xpath("div[@class='artical-importantPic']/img/@src").extract()
-        artical_main_content = artical_content.xpath("div[@class='artical-main-content']/p").extract()
-        artical_editor = artical_content.xpath("div[@class='artical-main-content']/span/text()").extract()
+        artical_content = artical.xpath("div[@class='artical-content']")
+        artical_content_read = artical_content.xpath("div[@class='artical-content-read']")
+        artical_content_video = artical_content.xpath("div[@class='artical-content-video']")
 
-        item = ArsenalArticalItem()
+        if len(artical_content_read) > 0:
+            print "read item"
+            artical_important_pic = artical_content_read.xpath("div[@class='artical-importantPic']/img/@src").extract()
+            artical_main_content = artical_content_read.xpath("div[@class='artical-main-content']//p/text()").extract()
+            artical_editor = artical_content_read.xpath("div[@class='artical-main-content']/span/text()").extract()
+            item = ArsenalArticalItem()
+            item['artical_type'] = "read"
+        elif len(artical_content_video) > 0:
+            print "video item"
+            artical_important_pic = artical_content_video.xpath("div[@class='artical-video-play']/a/img/@src").extract()
+            artical_main_content = artical_content_video.xpath("div[@class='artical-main-content']//p/text()").extract()
+            artical_editor = artical_content_video.xpath("div[@class='artical-main-content']/span/text()").extract()
+            artical_video_play = artical_content_video.xpath("div[@class='artical-video-play']/a/@href").extract()
+            item = ArsenalArticalVideoItem()
+            item['artical_type'] = "video"
+            item['artical_video_play'] = self.convert_content(artical_video_play)
+        
+
+        # item = ArsenalArticalItem()
         item['artical_title'] = self.convert_content(artical_title)
         item['artical_src'] = self.convert_content(artical_src)
         item['artical_date'] = self.convert_content(artical_date)
