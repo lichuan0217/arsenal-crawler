@@ -26,7 +26,8 @@ class ArsenalSpiderSpider(scrapy.Spider):
             "//body/div[@class='hp-wrap']/div[@class='voice-main']/div[@class='voice-msg-card-list']/div")
         for card in card_list:
             if self.close_down:
-                raise scrapy.exceptions.CloseSpider(reason = "No newer item")
+                # raise scrapy.exceptions.CloseSpider(reason = "No newer item")
+                return
             content = card.xpath("div[@class='voice-card-list']/div")
             full_text_url = content.xpath(
                 "div[@class='card-fullText-hd']/a/@href").extract()
@@ -48,7 +49,9 @@ class ArsenalSpiderSpider(scrapy.Spider):
             item['artical_id'] = self.convert_artical_id(item['full_text_url'])
 
             yield item
+            print "yield item"
             yield scrapy.Request(item['full_text_url'], callback=self.parse_full_content)
+            print "yield artical"
             # yield item
 
         # Next page to be crwaled
