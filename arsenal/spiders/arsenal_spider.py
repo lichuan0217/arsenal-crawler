@@ -72,14 +72,14 @@ class ArsenalSpiderSpider(scrapy.Spider):
         if len(artical_content_read) > 0:
             print "read item"
             artical_important_pic = artical_content_read.xpath("div[@class='artical-importantPic']/img/@src").extract()
-            artical_main_content = artical_content_read.xpath("div[@class='artical-main-content']//p/text()").extract()
+            artical_main_content = artical_content_read.xpath("div[@class='artical-main-content']//p").extract()
             artical_editor = artical_content_read.xpath("div[@class='artical-main-content']/span/text()").extract()
             item = ArsenalArticalItem()
             item['artical_type'] = "read"
         elif len(artical_content_video) > 0:
             print "video item"
             artical_important_pic = artical_content_video.xpath("div[@class='artical-video-play']/a/img/@src").extract()
-            artical_main_content = artical_content_video.xpath("div[@class='artical-main-content']//p/text()").extract()
+            artical_main_content = artical_content_video.xpath("div[@class='artical-main-content']//p").extract()
             artical_editor = artical_content_video.xpath("div[@class='artical-main-content']/span/text()").extract()
             artical_video_play = artical_content_video.xpath("div[@class='artical-video-play']/a/@href").extract()
             item = ArsenalArticalVideoItem()
