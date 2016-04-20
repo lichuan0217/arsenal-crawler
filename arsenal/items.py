@@ -32,5 +32,6 @@ class ArsenalArticalItem(scrapy.Item):
 # class ArsenalArticalReadItem(ArsenalArticalItem):
 #     artical_type = scrapy.Field()
 
+
 class ArsenalArticalVideoItem(ArsenalArticalItem):
     artical_video_play = scrapy.Field()
