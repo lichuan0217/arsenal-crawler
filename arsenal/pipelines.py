@@ -6,7 +6,7 @@
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
 import pymongo
 from items import ArsenalCardItem, ArsenalArticalItem
-from news_pusher import push_news
+from news_pusher import push_news, push_gunners_news
 
 
 class ArsenalPipeline(object):
@@ -41,7 +41,7 @@ class ArsenalPipeline(object):
         else:
             self.latest_artical_id = 0
         # print self.latest_item
-        print "Latest Artical ID: " + self.latest_artical_id
+        print "Latest Artical ID: " + str(self.latest_artical_id)
 
     def close_spider(self, spider):
         self.client.close()
@@ -56,6 +56,7 @@ class ArsenalPipeline(object):
             print("New Item should be push ......", item['artical_id'],
                   item['card_header'])
             push_news(item['artical_id'], item['card_header'])
+            push_gunners_news(item['artical_id'], item['card_header'])
         if isinstance(item, ArsenalCardItem):
             print "ArsenalCardItem!!!"
             self.collection_item.insert(dict(item))
